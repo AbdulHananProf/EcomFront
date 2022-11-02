@@ -1,25 +1,26 @@
-import logo from './logo.svg';
-import './App.css';
+import * as React from "react";
+import { Routes, Route, Link } from "react-router-dom";
+import "./App.css";
+import 'boxicons/css/boxicons.min.css';
+import Login from "./components/auth/Login";
+import DashBoard from "./components/dashBoard/DashBoard";
+import ProtectedRoutes from "./routes/ProtectedRoutes"
+import Category from "./components/category/Category"
+import Products from "./components/products/Products"
+import {Helmet} from "react-helmet";
 
-function App() {
+const App = () => {
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+      <>
+          <Routes>
+              <Route  path="/*" element={<ProtectedRoutes Component={Login} />} />
+              <Route exact path="/login" element={<Login />} />
+              <Route exact path="/Dashboard" element={<ProtectedRoutes Component={DashBoard} />} />
+              <Route exact path="/category" element={<ProtectedRoutes Component={Category} />} />
+              <Route exact path="/products" element={<ProtectedRoutes Component={Products} />} />
+          </Routes>
+      </>
   );
 }
-
-export default App;
+export default App
