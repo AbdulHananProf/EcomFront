@@ -17,9 +17,12 @@ const SideBarP = () => {
                         <SubMenu icon={<ListIcon/>}  label="Manage Products">
                             <MenuItem><Link to="/products"><CategoryIcon/>   Products </Link></MenuItem>
                         </SubMenu>
-                        <MenuItem> Documentation </MenuItem>
-                        <MenuItem> Calendar </MenuItem>
-                        <MenuItem> Logout </MenuItem>
+                        <SubMenu icon={<ListIcon/>}  label="Manage Orders">
+                            <MenuItem><Link to="/orders"><CategoryIcon/>   Orders </Link></MenuItem>
+                        </SubMenu>
+                        {/*<MenuItem> Documentation </MenuItem>*/}
+                        {/*<MenuItem> Calendar </MenuItem>*/}
+                        {/*<MenuItem> Logout </MenuItem>*/}
                     </Menu>
                 </Sidebar>
             </div>

@@ -4,9 +4,10 @@ import "./App.css";
 import 'boxicons/css/boxicons.min.css';
 import Login from "./components/auth/Login";
 import DashBoard from "./components/dashBoard/DashBoard";
-import ProtectedRoutes from "./routes/ProtectedRoutes"
-import Category from "./components/category/Category"
-import Products from "./components/products/Products"
+import ProtectedRoutes from "./routes/ProtectedRoutes";
+import Category from "./components/category/Category";
+import Products from "./components/products/Products";
+import Orders from "./components/orders/Orders";
 import {Helmet} from "react-helmet";
 
 const App = () => {
@@ -19,6 +20,7 @@ const App = () => {
               <Route exact path="/Dashboard" element={<ProtectedRoutes Component={DashBoard} />} />
               <Route exact path="/category" element={<ProtectedRoutes Component={Category} />} />
               <Route exact path="/products" element={<ProtectedRoutes Component={Products} />} />
+              <Route exact path="/orders" element={<ProtectedRoutes Component={Orders} />} />
           </Routes>
       </>
   );

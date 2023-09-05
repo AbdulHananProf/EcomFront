@@ -4,15 +4,15 @@ import SideBarP from "../sidebarTopBar/SideBarP";
 import AddIcon from '@mui/icons-material/Add';
 import {useState, useEffect, useLayoutEffect} from "react";
 import AddProduct from '../products/AddProduct'
-import EditCategory from '../category/EditCategory'
+import EditProduct from "./EditProduct";
 import {Helmet} from "react-helmet";
-import {url,GetAllProducts} from "../../controllers/WebController";
+import {url,GetAllProducts,DeleteProduct} from "../../controllers/WebController";
 import { Rings } from  'react-loader-spinner'
 import moment from "moment";
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteSweepIcon from '@mui/icons-material/DeleteSweep';
 import { useSelector, useDispatch } from 'react-redux';
-import {selectProducts,setAllProducts} from "../../redux/productSlice";
+import {selectProducts,setAllProducts,deleteProductRedx} from "../../redux/productSlice";
 
 
 const Products = () => {
@@ -20,8 +20,8 @@ const Products = () => {
     const reduxProductsList = useSelector(selectProducts)
     const [loader, setLoader] = useState(false);
     const [openAddModel ,setOpenAddModel] = useState(false)
-    const [openEditCategoryModel ,setOpenEditCategoryModel] = useState(false)
-    const [categoryId, setCategoryId] =useState('')
+    const [openEditProductModel ,setOpenProductModel] = useState(false)
+    const [productId, setProductId] =useState('')
 
     useLayoutEffect(()=>{
         setLoader(true)
@@ -35,8 +35,8 @@ const Products = () => {
 
     }
     const showEditModel = (id) =>{
-        setCategoryId(id)
-        setOpenEditCategoryModel(true)
+        setProductId(id)
+        setOpenProductModel(true)
     }
     const [error,setError] = useState({
         message:"",
@@ -49,14 +49,14 @@ const Products = () => {
         dispatch(setAllProducts(res.products))
         setLoader(false)
     }
-    // const deleteCategory = async (id) =>{
-    //     const res =  await DeleteCategory(id);
-    //     console.log(res)
-    //     if(res.status === "Success"){
-    //         dispatch(deleteCategoryStore(id))
-    //     }
-    //
-    // }
+    const deleteProduct = async (id) =>{
+        const res =  await DeleteProduct(id);
+        console.log(res)
+        if(res.status === "Success"){
+            dispatch(deleteProductRedx(id))
+        }
+
+    }
     const list = [...reduxProductsList].reverse().map((product,index)  => {
         const date = product.createdAt;
         // //const formattedDate = format(date, "MMMM do, yyyy H:mma");
@@ -64,9 +64,9 @@ const Products = () => {
         return(
             <tr key={index + 1}>
                 <td>{index + 1}</td>
-                <td><img src={url + "/uploads/categories/" + product.ProductThumbnail} style={{width:"50px",height:"50px"}}/></td>
+                <td><img src={url + "/uploads/products/" + product.ProductThumbnail} style={{width:"50px",height:"50px"}}/></td>
                 <td className="textP">{product.ProductName}</td>
-                <td className="textP">{product.ProductCategory}</td>
+                <td className="textP">{product.ProductCategory.CategoryName}</td>
                 <td className="textP">{product.ProductSlug}</td>
                 <td className="textP">{myTime}</td>
                 {product.ProductStatus === "Active" &&
@@ -80,9 +80,9 @@ const Products = () => {
                 </td>
                 }
                 <td>
-                    <button type="button" className="btn btn-success" ><EditIcon/></button>
+                    <button type="button" className="btn btn-success" onClick={()=>{showEditModel(product._id)}} ><EditIcon/></button>
                     &nbsp;
-                    <button type="button" className="btn btn-danger"  ><DeleteSweepIcon/></button>
+                    <button type="button" className="btn btn-danger"   onClick={()=>{deleteProduct(product._id)}} ><DeleteSweepIcon/></button>
                 </td>
             </tr>
         )
@@ -144,7 +144,7 @@ const Products = () => {
                                                                 </thead>
                                                                 <tbody>
 
-                                                                {loader === true  &&
+                                                                 {loader === true  &&
                                                                     <tr  id="three-circles-wrapper" style={{textAlign:"center",marginTop:"30px",width:"100%"}}>
                                                                         <td colSpan={8}>
                                                                             <Rings
@@ -176,7 +176,7 @@ const Products = () => {
                 </div>
 
                 {openAddModel && <AddProduct closeModel={setOpenAddModel}  err={setError} />}
-                {/*{openEditCategoryModel && <EditCategory closeModel={setOpenEditCategoryModel}  err={setError} id={categoryId}/>}*/}
+                {openEditProductModel && <EditProduct closeModel={setOpenProductModel}  err={setError} id={productId}/>}
 
 
             </div>

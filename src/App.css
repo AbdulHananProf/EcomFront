@@ -45,8 +45,8 @@ text-align: left;
 .sidebar {
   position: relative;
   border-right: 1px solid #efefef;
-  width: 320px!important;
-  min-width: 320px!important;
+  width: 100%!important;
+  min-width: 100%!important;
   transition: width,left,right,300ms;
   height: 100vh;
 }
@@ -327,6 +327,7 @@ tbody, td, tfoot, th, thead, tr {
 }
 .MuiFormControl-root{
   margin-bottom: 20px!important;
+  width: 100%!important;
 }
 #three-circles-wrapper div{
   display: block!important;
@@ -337,4 +338,7 @@ tbody, td, tfoot, th, thead, tr {
 .formValidation{
   display: block;
   font-size: 14px;
+}
+.MuiButtonBase-root{
+  width: 100%;
 }

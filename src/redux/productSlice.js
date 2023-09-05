@@ -10,42 +10,52 @@ export const productSlice = createSlice({
             state.allProducts = action.payload
 
         },
-        // addCategory : (state, action) =>{
-        //     state.allCategories = [...state.allCategories, action.payload]
-        // },
-        // editCategory : (state, action) =>{
-        //     const newState = state.allCategories.map(obj => {
-        //         // 👇️ if id equals 2, update array values
-        //         if (obj._id === action.payload._id) {
-        //             return {
-        //                 ...obj,
-        //                 CategoryImg: action.payload.CategoryImg,
-        //                 CategoryMD: action.payload.CategoryMD,
-        //                 CategoryMK: action.payload.CategoryMK,
-        //                 CategoryName: action.payload.CategoryName,
-        //                 CategorySlug: action.payload.CategorySlug,
-        //                 CategoryStatus: action.payload.CategoryStatus,
-        //             };
-        //         }
-        //         return obj;
-        //     });
-        //     state.allCategories = newState
-        // },
-        // deleteCategoryStore : (state, action) => {
-        //     console.log(action.payload)
-        //     let singleCategory = state.allCategories.filter(el => {
-        //         return el._id !== action.payload;
-        //     });
-        //     console.log(singleCategory)
-        //     state.allCategories = singleCategory
-        //
-        // }
+        addProduct : (state, action) =>{
+            state.allProducts = [...state.allProducts, action.payload]
+        },
+        editProduct : (state, action) =>{
+            const newState = state.allProducts.map(obj => {
+                // 👇️ if id equals 2, update array values
+                if (obj._id === action.payload._id) {
+                    return {
+                        ...obj,
+                        ProductName:action.payload.ProductName,
+                        ProductCategory:{_id:action.payload.ProductCategory._id,CategoryName:action.payload.ProductCategory.CategoryName},
+                        ProductSlug:action.payload.ProductSlug,
+                        ProductMK:action.payload.ProductMK,
+                        ProductMD:action.payload.ProductMD,
+                        ProductPrice:action.payload.ProductPrice,
+                        ProductWeight:action.payload.ProductWeight,
+                        ProductQuantity:action.payload.ProductQuantity,
+                        ProductDescription:action.payload.ProductDescription,
+                        ProductStatus:action.payload.ProductStatus,
+                        ProductShowOnHome:action.payload.ProductShowOnHome,
+                        ProductThumbnail:action.payload.ProductThumbnail,
+                        ProductImage1:action.payload.ProductImage1,
+                        ProductImage2:action.payload.ProductImage2,
+                        ProductImage3:action.payload.ProductImage3,
+                        ProductImage4:action.payload.ProductImage4,
+                    };
+                }
+                return obj;
+            });
+            state.allProducts = newState
+        },
+        deleteProductRedx : (state, action) => {
+            console.log(action.payload)
+            let singleProduct = state.allProducts.filter(el => {
+                return el._id !== action.payload;
+            });
+            console.log(singleProduct)
+            state.allProducts = singleProduct
+
+        }
 
 
     },
 })
 
-export const {setAllProducts} = productSlice.actions
+export const {setAllProducts, addProduct,editProduct,deleteProductRedx} = productSlice.actions
 
 // The function below is called a selector and allows us to select a value from
 // the state. Selectors can also be defined inline where they're used instead of

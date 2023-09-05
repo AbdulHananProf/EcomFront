@@ -1,7 +1,7 @@
 import React from "react";
 import axios from "axios";
 const url = "http://localhost:3000/";
-const urlApi = "http://192.168.18.32:3000/";
+const urlApi = "http://localhost:3000/";
 
 const LoginReq =  async (inputData) =>{
     let result = null
@@ -94,5 +94,58 @@ const GetAllProducts =  async () =>{
     return result
 }
 
+const ProductAdd =  async (formData) =>{
+    let result = null
+    axios.defaults.headers.common["Authorization"] = "Bearer " + localStorage.getItem("token");
+    await axios.post(`${url}api/portal/ProductAdd`, formData).then(response => {
+        result = response.data
+    }).catch(err => {
+        if (err) {
+            result = err.response.data
+        }
+    });
+    return result
+}
 
-export {LoginReq,urlApi,url,CategoryAdd,GetAllCategory,EditCategoryByID,CategoryEdit,DeleteCategory,GetAllProducts}
+
+const ProductEdit =  async (formData) =>{
+    let result = null
+    axios.defaults.headers.common["Authorization"] = "Bearer " + localStorage.getItem("token");
+    await axios.post(`${url}api/portal/ProductEdit`, formData).then(response => {
+        result = response.data
+    }).catch(err => {
+        if (err) {
+            result = err.response.data
+        }
+    });
+    return result
+}
+const DeleteProduct = async (id) =>{
+    let result = null
+    axios.defaults.headers.common["Authorization"] = "Bearer " + localStorage.getItem("token");
+    await axios.get(`${url}api/portal/ProductDelete/${id}`).then(response => {
+        result = response.data
+    }).catch(err => {
+        if (err) {
+            result = err.response.data
+        }
+    });
+    return result
+}
+
+const orderHistory  = async (id) => {
+    let result = null
+    axios.defaults.headers.common["Authorization"] = "Bearer " + localStorage.getItem("token");
+    await axios.get(`${url}api/portal/orders`).then(response => {
+        result = response.data
+    }).catch(err => {
+        if (err) {
+            result = err.response.data
+        }
+    });
+    return result
+}
+
+
+
+export {LoginReq,urlApi,url,CategoryAdd,GetAllCategory,EditCategoryByID,CategoryEdit,DeleteCategory,GetAllProducts,ProductAdd,ProductEdit,DeleteProduct,orderHistory}
