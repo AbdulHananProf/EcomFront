@@ -13,7 +13,9 @@ import { useSelector, useDispatch } from 'react-redux';
 import {addProduct} from '../../redux/productSlice';
 import { CKEditor } from '@ckeditor/ckeditor5-react';
 import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
-import {GetAllCategory, ProductAdd} from "../../controllers/WebController";
+import {GetAllFabric,GetAllCategory, ProductAdd, getAllSizes} from "../../controllers/WebController";
+import Select1 from 'react-select';
+
 
 const AddProduct = ({closeModel,err}) => {
     const dispatch = useDispatch();
@@ -21,6 +23,7 @@ const AddProduct = ({closeModel,err}) => {
     const [loader, setLoader] = useState(false);
     const [formError, setFormError] = useState(false);
     const [PCategory,setPCategory] = useState([])
+    const [PFabric,setPFabric] = useState([])
     const handleClose = () => {
         closeModel(false)
         setShow(false)
@@ -29,6 +32,8 @@ const AddProduct = ({closeModel,err}) => {
 
     useEffect(() => {
         getProductCategory()
+        getProductFabric()
+        getSizes()
     }, []);
 
     const getProductCategory = async () => {
@@ -36,17 +41,24 @@ const AddProduct = ({closeModel,err}) => {
         setPCategory(res.categories)
     }
 
+    const getProductFabric = async () => {
+        const res =  await GetAllFabric()
+        setPFabric(res.fabric)
+    }
+
     const [formDatas, setFormData] = useState({
         ProductName:"",
         ProductCategory:"",
+        ProductFabric:"",
         ProductSlug:"",
         ProductMK:"",
         ProductMD:"",
         ProductPrice:"",
-        ProductWeight:"",
-        ProductQuantity:"",
+        ProductDiscountPrice:"",
+        ProductStichedPrice:"",
+        ProductDiscountStichedPrice:"",
         ProductDescription:"",
-        ProductStatus:"Active",
+        ProductStatus:"In-Active",
         ProductShowOnHome:"No"
     });
     const handleChange = (event) => {
@@ -54,36 +66,202 @@ const AddProduct = ({closeModel,err}) => {
         const value = event.target.value;
         setFormData( pre =>({...pre, [name]:value}));
     };
-    const [ProductThumbnail, setProductThumbnail] = useState("")
-    const [ProductImage1, setProductImage1] = useState("")
-    const [ProductImage2, setProductImage2] = useState("")
-    const [ProductImage3, setProductImage3] = useState("")
-    const [ProductImage4, setProductImage4] = useState("")
+    
+    const createSlug = () => {
+        let ProductName = formDatas.ProductName;
+        const stringWithoutSpaces = ProductName.replace(/\s+/g, '');
+        const lowercaseString = stringWithoutSpaces.toLowerCase();
+        console.log(formDatas.ProductName)
+        setFormData(pre => ({ ...pre, "ProductSlug": lowercaseString }));
+    }
+
+    const productDes = (data) => {
+        setFormData( pre =>({...pre, ProductDescription:data}));
+   }
+
+   const [sizeOptionList, setSizeOptionList] = useState();
+   const [selectedOptions2, setSelectedOptions2] = useState();
+   const getSizes = async () => {
+       const res = await getAllSizes();
+       setSizeOptionList(res.size)
+   }
+   function handleSelect2(data) {
+       setSelectedOptions2(data);
+   }
+   
+   const [colorOptionList, setColorOptionList] = useState([
+    { "value": "AliceBlue", "label": "AliceBlue" },
+    { "value": "AntiqueWhite", "label": "AntiqueWhite" },
+    { "value": "Aqua", "label": "Aqua" },
+    { "value": "Aquamarine", "label": "Aquamarine" },
+    { "value": "Azure", "label": "Azure" },
+    { "value": "Beige", "label": "Beige" },
+    { "value": "Bisque", "label": "Bisque" },
+    { "value": "Black", "label": "Black" },
+    { "value": "BlanchedAlmond", "label": "BlanchedAlmond" },
+    { "value": "Blue", "label": "Blue" },
+    { "value": "BlueViolet", "label": "BlueViolet" },
+    { "value": "Brown", "label": "Brown" },
+    { "value": "BurlyWood", "label": "BurlyWood" },
+    { "value": "CadetBlue", "label": "CadetBlue" },
+    { "value": "Chartreuse", "label": "Chartreuse" },
+    { "value": "Chocolate", "label": "Chocolate" },
+    { "value": "Coral", "label": "Coral" },
+    { "value": "CornflowerBlue", "label": "CornflowerBlue" },
+    { "value": "Cornsilk", "label": "Cornsilk" },
+    { "value": "Crimson", "label": "Crimson" },
+    { "value": "Cyan", "label": "Cyan" },
+    { "value": "DarkBlue", "label": "DarkBlue" },
+    { "value": "DarkCyan", "label": "DarkCyan" },
+    { "value": "DarkGoldenRod", "label": "DarkGoldenRod" },
+    { "value": "DarkGray", "label": "DarkGray" },
+    { "value": "DarkGreen", "label": "DarkGreen" },
+    { "value": "DarkKhaki", "label": "DarkKhaki" },
+    { "value": "DarkMagenta", "label": "DarkMagenta" },
+    { "value": "DarkOliveGreen", "label": "DarkOliveGreen" },
+    { "value": "DarkOrange", "label": "DarkOrange" },
+    { "value": "DarkOrchid", "label": "DarkOrchid" },
+    { "value": "DarkRed", "label": "DarkRed" },
+    { "value": "DarkSalmon", "label": "DarkSalmon" },
+    { "value": "DarkSeaGreen", "label": "DarkSeaGreen" },
+    { "value": "DarkSlateBlue", "label": "DarkSlateBlue" },
+    { "value": "DarkSlateGray", "label": "DarkSlateGray" },
+    { "value": "DarkTurquoise", "label": "DarkTurquoise" },
+    { "value": "DarkViolet", "label": "DarkViolet" },
+    { "value": "DeepPink", "label": "DeepPink" },
+    { "value": "DeepSkyBlue", "label": "DeepSkyBlue" },
+    { "value": "DimGray", "label": "DimGray" },
+    { "value": "DodgerBlue", "label": "DodgerBlue" },
+    { "value": "FireBrick", "label": "FireBrick" },
+    { "value": "FloralWhite", "label": "FloralWhite" },
+    { "value": "ForestGreen", "label": "ForestGreen" },
+    { "value": "Fuchsia", "label": "Fuchsia" },
+    { "value": "Gainsboro", "label": "Gainsboro" },
+    { "value": "GhostWhite", "label": "GhostWhite" },
+    { "value": "Gold", "label": "Gold" },
+    { "value": "GoldenRod", "label": "GoldenRod" },
+    { "value": "Gray", "label": "Gray" },
+    { "value": "Green", "label": "Green" },
+    { "value": "GreenYellow", "label": "GreenYellow" },
+    { "value": "HoneyDew", "label": "HoneyDew" },
+    { "value": "HotPink", "label": "HotPink" },
+    { "value": "IndianRed", "label": "IndianRed" },
+    { "value": "Indigo", "label": "Indigo" },
+    { "value": "Ivory", "label": "Ivory" },
+    { "value": "Khaki", "label": "Khaki" },
+    { "value": "Lavender", "label": "Lavender" },
+    { "value": "LavenderBlush", "label": "LavenderBlush" },
+    { "value": "LawnGreen", "label": "LawnGreen" },
+    { "value": "LemonChiffon", "label": "LemonChiffon" },
+    { "value": "LightBlue", "label": "LightBlue" },
+    { "value": "LightCoral", "label": "LightCoral" },
+    { "value": "LightCyan", "label": "LightCyan" },
+    { "value": "LightGoldenRodYellow", "label": "LightGoldenRodYellow" },
+    { "value": "LightGray", "label": "LightGray" },
+    { "value": "LightGreen", "label": "LightGreen" },
+    { "value": "LightPink", "label": "LightPink" },
+    { "value": "LightSalmon", "label": "LightSalmon" },
+    { "value": "LightSeaGreen", "label": "LightSeaGreen" },
+    { "value": "LightSkyBlue", "label": "LightSkyBlue" },
+    { "value": "LightSlateGray", "label": "LightSlateGray" },
+    { "value": "LightSteelBlue", "label": "LightSteelBlue" },
+    { "value": "LightYellow", "label": "LightYellow" },
+    { "value": "Lime", "label": "Lime" },
+    { "value": "LimeGreen", "label": "LimeGreen" },
+    { "value": "Linen", "label": "Linen" },
+    { "value": "Magenta", "label": "Magenta" },
+    { "value": "Maroon", "label": "Maroon" },
+    { "value": "MediumAquaMarine", "label": "MediumAquaMarine" },
+    { "value": "MediumBlue", "label": "MediumBlue" },
+    { "value": "MediumOrchid", "label": "MediumOrchid" },
+    { "value": "MediumPurple", "label": "MediumPurple" },
+    { "value": "MediumSeaGreen", "label": "MediumSeaGreen" },
+    { "value": "MediumSlateBlue", "label": "MediumSlateBlue" },
+    { "value": "MediumSpringGreen", "label": "MediumSpringGreen" },
+    { "value": "MediumTurquoise", "label": "MediumTurquoise" },
+    { "value": "MediumVioletRed", "label": "MediumVioletRed" },
+    { "value": "MidnightBlue", "label": "MidnightBlue" },
+    { "value": "MintCream", "label": "MintCream" },
+    { "value": "MistyRose", "label": "MistyRose" },
+    { "value": "Moccasin", "label": "Moccasin" },
+    { "value": "NavajoWhite", "label": "NavajoWhite" },
+    { "value": "Navy", "label": "Navy" },
+    { "value": "OldLace", "label": "OldLace" },
+    { "value": "Olive", "label": "Olive" },
+    { "value": "OliveDrab", "label": "OliveDrab" },
+    { "value": "Orange", "label": "Orange" },
+    { "value": "OrangeRed", "label": "OrangeRed" },
+    { "value": "Orchid", "label": "Orchid" },
+    { "value": "PaleGoldenRod", "label": "PaleGoldenRod" },
+    { "value": "PaleGreen", "label": "PaleGreen" },
+    { "value": "PaleTurquoise", "label": "PaleTurquoise" },
+    { "value": "PaleVioletRed", "label": "PaleVioletRed" },
+    { "value": "PapayaWhip", "label": "PapayaWhip" },
+    { "value": "PeachPuff", "label": "PeachPuff" },
+    { "value": "Peru", "label": "Peru" },
+    { "value": "Pink", "label": "Pink" },
+    { "value": "Plum", "label": "Plum" },
+    { "value": "PowderBlue", "label": "PowderBlue" },
+    { "value": "Purple", "label": "Purple" },
+    { "value": "RebeccaPurple", "label": "RebeccaPurple" },
+    { "value": "Red", "label": "Red" },
+    { "value": "RosyBrown", "label": "RosyBrown" },
+    { "value": "RoyalBlue", "label": "RoyalBlue" },
+    { "value": "SaddleBrown", "label": "SaddleBrown" },
+    { "value": "Salmon", "label": "Salmon" },
+    { "value": "SandyBrown", "label": "SandyBrown" },
+    { "value": "SeaGreen", "label": "SeaGreen" },
+    { "value": "SeaShell", "label": "SeaShell" },
+    { "value": "Sienna", "label": "Sienna" },
+    { "value": "Silver", "label": "Silver" },
+    { "value": "SkyBlue", "label": "SkyBlue" },
+    { "value": "SlateBlue", "label": "SlateBlue" },
+    { "value": "SlateGray", "label": "SlateGray" },
+    { "value": "Snow", "label": "Snow" },
+    { "value": "SpringGreen", "label": "SpringGreen" },
+    { "value": "SteelBlue", "label": "SteelBlue" },
+    { "value": "Tan", "label": "Tan" },
+    { "value": "Teal", "label": "Teal" },
+    { "value": "Thistle", "label": "Thistle" },
+    { "value": "Tomato", "label": "Tomato" },
+    { "value": "Turquoise", "label": "Turquoise" },
+    { "value": "Violet", "label": "Violet" },
+    { "value": "Wheat", "label": "Wheat" },
+    { "value": "White", "label": "White" },
+    { "value": "WhiteSmoke", "label": "WhiteSmoke" },
+    { "value": "Yellow", "label": "Yellow" },
+    { "value": "YellowGreen", "label": "YellowGreen" }
+  ]);
+   const [selectedOptions3, setSelectedOptions3] = useState();
+   function handleSelect3(data) {
+       setSelectedOptions3(data);
+   }
 
     const saveData = async (e) => {
         e.preventDefault()
-        const{ProductName, ProductCategory, ProductSlug, ProductMK, ProductMD, ProductPrice, ProductWeight, ProductQuantity, ProductDescription, ProductStatus, ProductShowOnHome} = formDatas
+        const{ProductName, ProductCategory, ProductFabric, ProductSlug, ProductMK, ProductMD, ProductPrice, ProductDiscountPrice, ProductDescription, ProductStatus, ProductShowOnHome,ProductStichedPrice,ProductDiscountStichedPrice} = formDatas
         if(ProductName && ProductCategory && ProductSlug && ProductMK && ProductMD && ProductPrice
-             && ProductDescription && ProductStatus && ProductThumbnail && ProductImage2 && ProductImage3 && ProductImage4 ){
+             && ProductDescription && ProductStatus ){
+            let sizes = JSON.stringify(selectedOptions2)
+            let colors = JSON.stringify(selectedOptions3)    
             setLoader(true)
             const formData = new FormData();
-            formData.append('ProductThumbnail', ProductThumbnail);
-            formData.append('ProductImage1', ProductImage1);
-            formData.append('ProductImage2', ProductImage2);
-            formData.append('ProductImage3', ProductImage3);
-            formData.append('ProductImage4', ProductImage4);
             formData.append('ProductName', ProductName);
             formData.append('ProductCategory', ProductCategory);
+            formData.append('ProductFabric', ProductFabric);
             formData.append('ProductSlug', ProductSlug);
             formData.append('ProductMK', ProductMK);
             formData.append('ProductMD', ProductMD);
             formData.append('ProductPrice', ProductPrice);
-            formData.append('ProductWeight', ProductWeight);
-            formData.append('ProductQuantity', ProductQuantity);
+            formData.append('ProductDiscountPrice', ProductDiscountPrice);
+            formData.append('ProductStichedPrice', ProductStichedPrice);
+            formData.append('ProductDiscountStichedPrice', ProductDiscountStichedPrice);
             formData.append('ProductDescription', ProductDescription);
             formData.append('ProductStatus', ProductStatus);
             formData.append('ProductShowOnHome', ProductShowOnHome);
-            const res =  await ProductAdd(formData)
+            formData.append('sizes', sizes);
+            formData.append('colors', colors);
+            const res =  await ProductAdd(formData);
             if(res.status === "Success"){
                 dispatch(addProduct(res.product))
                 err(prevState => ({...prevState , message:res.message}))
@@ -99,9 +277,8 @@ const AddProduct = ({closeModel,err}) => {
         }
 
     }
-    const productDes = (data) => {
-         setFormData( pre =>({...pre, ProductDescription:data}));
-    }
+
+
     return (
         <>
             <Modal show={show} onHide={handleClose} animation={false}>
@@ -117,6 +294,7 @@ const AddProduct = ({closeModel,err}) => {
                                     <div className="alert alert-danger" role="alert"  >
                                         {formDatas.ProductName === "" && <span className="formValidation"><strong>Product Name Field is Required</strong></span>}
                                         {formDatas.ProductCategory === "" && <span className="formValidation"><strong>Product Category Field is Required</strong></span>}
+                                        {formDatas.ProductFabric === "" && <span className="formValidation"><strong>Product Fabric Field is Required</strong></span>}
                                         {formDatas.ProductSlug === "" && <span className="formValidation"><strong>Product Slug Field is Required</strong></span>}
                                         {formDatas.ProductMK === "" && <span className="formValidation"><strong>Product Meta Keyword Field is Required</strong></span>}
                                         {formDatas.ProductMD === "" && <span className="formValidation"><strong>Product Meta Desc Field is Required</strong></span>}
@@ -124,16 +302,16 @@ const AddProduct = ({closeModel,err}) => {
                                         {formDatas.ProductDescription === "" && <span className="formValidation"><strong>Product Description Field is Required</strong></span>}
                                         {formDatas.ProductStatus === "" && <span className="formValidation"><strong>Product Status Field is Required</strong></span>}
                                         {formDatas.ProductShowOnHome === "" && <span className="formValidation"><strong>Product Show on Home Field is Required</strong></span>}
-                                        {ProductThumbnail === "" && <span className="formValidation"><strong>Product Thumbnail Image is Required</strong></span>}
+                                        {/* {ProductThumbnail === "" && <span className="formValidation"><strong>Product Thumbnail Image is Required</strong></span>}
                                         {ProductImage1 === "" && <span className="formValidation"><strong>Product Image 1 Image is Required</strong></span>}
                                         {ProductImage2 === "" && <span className="formValidation"><strong>Product Image 2 Image is Required</strong></span>}
                                         {ProductImage3 === "" && <span className="formValidation"><strong>Product Image 3 Image is Required</strong></span>}
-                                        {ProductImage4 === "" && <span className="formValidation"><strong>Product Image 4 Image is Required</strong></span>}
+                                        {ProductImage4 === "" && <span className="formValidation"><strong>Product Image 4 Image is Required</strong></span>} */}
                                     </div>
                                 </div>
                                 }
                                 <div className="col-md-4">
-                                    <TextField  type="text" onChange={handleChange}  label="Product Name" name="ProductName" variant="outlined" />
+                                    <TextField  type="text" onChange={handleChange}  label="Product Name"  onBlur={createSlug} name="ProductName" variant="outlined" />
                                 </div>
                                 <div className="col-md-4">
                                     <FormControl fullWidth>
@@ -158,7 +336,29 @@ const AddProduct = ({closeModel,err}) => {
                                     </FormControl>
                                 </div>
                                 <div className="col-md-4">
-                                    <TextField type="text"  onChange={handleChange} label="Product Slug" placeholder="product-name-12-abc" required name="ProductSlug" variant="outlined" />
+                                    <FormControl fullWidth>
+                                        <InputLabel id="demo-simple-select-label">Product Fabric</InputLabel>
+                                        <Select
+                                            labelId="demo-simple-select-label"
+                                            id="demo-simple-select"
+                                            value={formDatas.ProductFabric}
+                                            label="Product Fabric"
+                                            name="ProductFabric"
+                                            onChange={handleChange}
+                                            required
+                                        >
+                                            {
+                                                PFabric?.map((Fabric,index) =>{
+                                                    return(
+                                                        <MenuItem value={Fabric._id}>{Fabric.FabricName}</MenuItem>
+                                                    )
+                                                })
+                                            }
+                                        </Select>
+                                    </FormControl>
+                                </div>
+                                <div className="col-md-4">
+                                    <TextField type="text"  onChange={handleChange} label="Product Slug" value={formDatas.ProductSlug} disabled placeholder="product-name-12-abc" required name="ProductSlug" variant="outlined" />
                                 </div>
                                 <div className="col-md-4">
                                     <TextField type="text" onChange={handleChange} label="Product Meta Keyword" required name="ProductMK" variant="outlined" />
@@ -167,13 +367,16 @@ const AddProduct = ({closeModel,err}) => {
                                     <TextField type="text"  onChange={handleChange} label="Product Meta Desc" required name="ProductMD"  variant="outlined" />
                                 </div>
                                 <div className="col-md-4">
-                                    <TextField type="text"  onChange={handleChange} label="Product Price" required name="ProductPrice"  variant="outlined" />
+                                    <TextField type="number"  onChange={handleChange} label="Product Orignal Price" required name="ProductPrice"  variant="outlined" />
                                 </div>
                                 <div className="col-md-4">
-                                    <TextField type="text"  onChange={handleChange} label="Product Weight" required name="ProductWeight"  variant="outlined" />
+                                    <TextField type="number"  onChange={handleChange} label="Product Discount Price" required name="ProductDiscountPrice"  variant="outlined" />
                                 </div>
                                 <div className="col-md-4">
-                                    <TextField type="text"  onChange={handleChange} label="Product Quantity" required name="ProductQuantity"  variant="outlined" />
+                                    <TextField type="number"  onChange={handleChange} label="Product Stiched Price" required name="ProductStichedPrice"  variant="outlined" />
+                                </div>
+                                <div className="col-md-4">
+                                    <TextField type="number"  onChange={handleChange} label="Product Stiched Dicount Price" required name="ProductDiscountStichedPrice"  variant="outlined" />
                                 </div>
 
                                 <div className="col-md-4">
@@ -212,41 +415,30 @@ const AddProduct = ({closeModel,err}) => {
                                     </FormControl>
                                 </div>
 
-
-
-                                <div className="col-md-4">
-                                    <Buttons variant="contained" component="label" >
-                                        Product Thumbnail
-                                        <input hidden accept="image/*" required onChange={(e) => setProductThumbnail(e.target.files[0])} name="CategoryImg"  type="file" />
-                                    </Buttons>
+                                <div className="col-md-12">
+                                    <FormControl fullWidth>
+                                        <Select1
+                                                options={sizeOptionList}
+                                                placeholder="Select Sizes"
+                                                value={selectedOptions2}
+                                                onChange={handleSelect2}
+                                                isSearchable={true}
+                                                isMulti
+                                        />
+                                    </FormControl>
                                 </div>
-
-                                <div className="col-md-4">
-                                    <Buttons variant="contained" component="label" >
-                                        Product Image 1
-                                        <input hidden accept="image/*" required onChange={(e) => setProductImage1(e.target.files[0])} name="CategoryImg"  type="file" />
-                                    </Buttons>
-                                </div>
-
-                                <div className="col-md-4">
-                                    <Buttons variant="contained" component="label" >
-                                        Product Image 2
-                                        <input hidden accept="image/*" required onChange={(e) => setProductImage2(e.target.files[0])} name="CategoryImg"  type="file" />
-                                    </Buttons>
-                                </div>
-
-                                <div className="col-md-4">
-                                    <Buttons variant="contained" component="label" >
-                                        Product Image 3
-                                        <input hidden accept="image/*" required onChange={(e) => setProductImage3(e.target.files[0])} name="CategoryImg"  type="file" />
-                                    </Buttons>
-                                </div>
-
-                                <div className="col-md-4">
-                                    <Buttons variant="contained" component="label" >
-                                        Product Image 4
-                                        <input hidden accept="image/*" required onChange={(e) => setProductImage4(e.target.files[0])} name="CategoryImg"  type="file" />
-                                    </Buttons>
+                                
+                                <div className="col-md-12">
+                                    <FormControl fullWidth>
+                                        <Select1
+                                                options={colorOptionList}
+                                                placeholder="Select Colors"
+                                                value={selectedOptions3}
+                                                onChange={handleSelect3}
+                                                isSearchable={true}
+                                                isMulti
+                                        />
+                                    </FormControl>
                                 </div>
 
                                 <div className="col-md-12">

@@ -29,6 +29,7 @@ const EditCategory = ({closeModel,err,id}) => {
         CategoryMK:"",
         CategoryMD:"",
         CategoryStatus:"Active",
+        type:""
     })
 
     useEffect(()=>{
@@ -64,8 +65,8 @@ const EditCategory = ({closeModel,err,id}) => {
     const saveData = async (e) => {
         e.preventDefault()
         // const data = {categoryImg,formDatas}
-        const{CategoryName,CategorySlug,CategoryMK,CategoryMD,CategoryStatus} = categoryData
-        if(CategoryName && CategorySlug && CategoryMK && CategoryMK && CategoryMD && CategoryStatus){
+        const{CategoryName,CategorySlug,CategoryMK,CategoryMD,CategoryStatus,type} = categoryData
+        if(CategoryName && CategorySlug && CategoryMK && CategoryMK && CategoryMD && CategoryStatus && type){
             setLoader(true)
             const formData = new FormData();
             formData.append('id', categoryData._id);
@@ -75,6 +76,7 @@ const EditCategory = ({closeModel,err,id}) => {
             formData.append('CategoryMK', categoryData.CategoryMK);
             formData.append('CategoryMD', categoryData.CategoryMD );
             formData.append('CategoryStatus', categoryData.CategoryStatus  );
+            formData.append('type', categoryData.type);
             formData.append('tokken', localStorage.getItem("token")  );
             const res =  await CategoryEdit(formData)
 
@@ -141,7 +143,7 @@ const EditCategory = ({closeModel,err,id}) => {
                                         {categoryData.CategoryMK === "" && <span className="formValidation"><strong>Category Meta Keyword Field is Required</strong></span>}
                                         {categoryData.CategoryMD === "" && <span className="formValidation"><strong>Category Meta Desc Field is Required</strong></span>}
                                         {categoryData.CategoryStatus === "" && <span className="formValidation"><strong>Category Status Field is Required</strong></span>}
-                                        {categoryImg === "" && <span className="formValidation"><strong>Category Image Field is Required</strong></span>}
+                                        {/* {categoryImg === "" && <span className="formValidation"><strong>Category Image Field is Required</strong></span>} */}
                                     </div>
                                 </div>
                                 }
@@ -176,7 +178,23 @@ const EditCategory = ({closeModel,err,id}) => {
                                     </FormControl>
                                 </div>
 
-
+                                <div className="col-md-4">
+                                    <FormControl fullWidth>
+                                        <InputLabel id="demo-simple-select-label">Stiched/Unstiched</InputLabel>
+                                        <Select
+                                            labelId="demo-simple-select-label"
+                                            value={categoryData.type}
+                                            label="Stiched/Unstiched"
+                                            name="type"
+                                            onChange={handleChange}
+                                            required
+                                        >
+                                            <MenuItem value="">Select</MenuItem>
+                                            <MenuItem value="Stiched">Stiched</MenuItem>
+                                            <MenuItem value="Unstiched">Unstiched</MenuItem>
+                                        </Select>
+                                    </FormControl>
+                                </div>
 
                                 <div className="col-md-4">
                                     <Buttons variant="contained" component="label" >

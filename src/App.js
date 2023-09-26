@@ -8,6 +8,8 @@ import ProtectedRoutes from "./routes/ProtectedRoutes";
 import Category from "./components/category/Category";
 import Products from "./components/products/Products";
 import Orders from "./components/orders/Orders";
+import Sizes from "./components/sizes/Sizes"
+import Fabric from "./components/fabrics/Fabric";
 import {Helmet} from "react-helmet";
 
 const App = () => {
@@ -19,6 +21,8 @@ const App = () => {
               <Route exact path="/login" element={<Login />} />
               <Route exact path="/Dashboard" element={<ProtectedRoutes Component={DashBoard} />} />
               <Route exact path="/category" element={<ProtectedRoutes Component={Category} />} />
+              <Route exact path="/sizes" element={<ProtectedRoutes Component={Sizes} />} />
+              <Route exact path="/fabrics" element={<ProtectedRoutes Component={Fabric} />} />
               <Route exact path="/products" element={<ProtectedRoutes Component={Products} />} />
               <Route exact path="/orders" element={<ProtectedRoutes Component={Orders} />} />
           </Routes>

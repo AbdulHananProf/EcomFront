@@ -21,14 +21,19 @@ const Products = () => {
     const [loader, setLoader] = useState(false);
     const [openAddModel ,setOpenAddModel] = useState(false)
     const [openEditProductModel ,setOpenProductModel] = useState(false)
-    const [productId, setProductId] =useState('')
+    const [productId, setProductId] = useState('')
 
     useLayoutEffect(()=>{
         setLoader(true)
     },[])
+    const [error,setError] = useState({
+        message:"",
+        stauts:""
+    });
+
     useEffect(()=>{
         GetAllProductList()
-    },[])
+    },[error])
 
     const showAddModel = () =>{
         setOpenAddModel(true)
@@ -38,11 +43,6 @@ const Products = () => {
         setProductId(id)
         setOpenProductModel(true)
     }
-    const [error,setError] = useState({
-        message:"",
-        stauts:""
-    });
-
 
     const GetAllProductList = async () =>{
         const res =  await GetAllProducts();
@@ -64,9 +64,9 @@ const Products = () => {
         return(
             <tr key={index + 1}>
                 <td>{index + 1}</td>
-                <td><img src={url + "/uploads/products/" + product.ProductThumbnail} style={{width:"50px",height:"50px"}}/></td>
                 <td className="textP">{product.ProductName}</td>
                 <td className="textP">{product.ProductCategory.CategoryName}</td>
+                <td className="textP">{product.ProductFabric.FabricName}</td>
                 <td className="textP">{product.ProductSlug}</td>
                 <td className="textP">{myTime}</td>
                 {product.ProductStatus === "Active" &&
@@ -133,9 +133,9 @@ const Products = () => {
                                                                 <thead className="tableHead">
                                                                 <tr>
                                                                     <th>#</th>
-                                                                    <th>Product Image</th>
                                                                     <th>Product Name</th>
                                                                     <th>Product Category</th>
+                                                                    <th>Product Fabric</th>
                                                                     <th>Product Slug</th>
                                                                     <th>Product Date</th>
                                                                     <th>Product Status</th>

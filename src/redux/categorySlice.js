@@ -26,6 +26,7 @@ export const categorySlice = createSlice({
                         CategoryName: action.payload.CategoryName,
                         CategorySlug: action.payload.CategorySlug,
                         CategoryStatus: action.payload.CategoryStatus,
+                        type: action.payload.type,
                     };
                 }
                 return obj;

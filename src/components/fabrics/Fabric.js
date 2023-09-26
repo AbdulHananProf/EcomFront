@@ -3,21 +3,21 @@ import TopBar from "../sidebarTopBar/TopBar";
 import SideBarP from "../sidebarTopBar/SideBarP";
 import AddIcon from '@mui/icons-material/Add';
 import {useState, useEffect, useLayoutEffect} from "react";
-import AddCategory from './AddCategory'
-import EditCategory from './EditCategory'
+import AddFabrics from './AddFabrics'
+import EditFabrics from './EditFabrics'
 import {Helmet} from "react-helmet";
-import {GetAllCategory,url,DeleteCategory} from "../../controllers/WebController";
+import {GetAllFabric,url,DeleteCategory} from "../../controllers/WebController";
 import { Rings } from  'react-loader-spinner'
 import moment from "moment";
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteSweepIcon from '@mui/icons-material/DeleteSweep';
 import { useSelector, useDispatch } from 'react-redux';
-import {selectCategories, setAllCategory, deleteCategoryStore} from '../../redux/categorySlice'
+import {selectFabrics, setAllFabrics, deleteFabricStore} from '../../redux/fabricSlice'
 
 
-const Category = () => {
+const Fabric = () => {
     const dispatch = useDispatch();
-    const reduxCategoriesList = useSelector(selectCategories)
+    const reduxFabricsList = useSelector(selectFabrics)
     const [loader, setLoader] = useState(false);
     const [openAddCategoryModel ,setOpenAddCategoryModel] = useState(false)
     const [openEditCategoryModel ,setOpenEditCategoryModel] = useState(false)
@@ -46,44 +46,43 @@ const Category = () => {
 
 
     const GetAllCategoryList = async () =>{
-        const res =  await GetAllCategory();
-        dispatch(setAllCategory(res.categories))
+        const res =  await GetAllFabric();
+        dispatch(setAllFabrics(res.fabric))
         setLoader(false)
     }
     const deleteCategory = async (id) =>{
         const res =  await DeleteCategory(id);
         console.log(res)
         if(res.status === "Success"){
-            dispatch(deleteCategoryStore(id))
+            dispatch(deleteFabricStore(id))
         }
 
     }
-    const list = [...reduxCategoriesList].reverse().map((category,index)  => {
-        const date = category.createdAt;
+    const list = [...reduxFabricsList].reverse().map((fabric,index)  => {
+        const date = fabric.createdAt;
         // //const formattedDate = format(date, "MMMM do, yyyy H:mma");
         const myTime = moment(date).format('MMMM Do YYYY');
         return(
             <tr key={index + 1}>
                 <td>{index + 1}</td>
-                <td><img src={url + "/uploads/categories/" + category.CategoryImg} style={{width:"50px",height:"50px"}}/></td>
-                <td className="textP">{category.CategoryName}</td>
-                <td className="textP">{category.CategorySlug}</td>
+                <td><img src={url + "uploads/fabric/" + fabric.FabricImg} style={{width:"50px",height:"50px"}}/></td>
+                <td className="textP">{fabric.FabricName}</td>
+                <td className="textP">{fabric.FabricSlug}</td>
                 <td className="textP">{myTime}</td>
-                {category.CategoryStatus === "Active" &&
+                {fabric.FabricStatus === "Active" &&
                 <td className="textP" style={{backgroundColor:"#00ba008f",color:"white"}}>
-                    <strong>{category.CategoryStatus}</strong>
+                    <strong>{fabric.FabricStatus}</strong>
                 </td>
                 }
-                {category.CategoryStatus === "In-Active" &&
+                {fabric.FabricStatus === "In-Active" &&
                 <td className="textP" style={{backgroundColor:"rgb(241 54 54 / 66%)",color:"white"}}>
-                    <strong>{category.CategoryStatus}</strong>
+                    <strong>{fabric.FabricStatus}</strong>
                 </td>
                 }
-                <td className="textP">{category.type}</td>
                 <td>
-                    <button type="button" className="btn btn-success"  onClick={()=> showEditModel(category._id)}><EditIcon/></button>
+                    <button type="button" className="btn btn-success"  onClick={()=> showEditModel(fabric._id)}><EditIcon/></button>
                     &nbsp;
-                    <button type="button" className="btn btn-danger"  onClick={()=> deleteCategory(category._id)}><DeleteSweepIcon/></button>
+                    <button type="button" className="btn btn-danger"  onClick={()=> deleteCategory(fabric._id)}><DeleteSweepIcon/></button>
                 </td>
             </tr>
         )
@@ -91,7 +90,7 @@ const Category = () => {
     return (
         <>
             <Helmet>
-                <title>Category | Portal</title>
+                <title>Fabric | Portal</title>
                 <meta name="description" content="This the Admin Portal to Control the website" />
             </Helmet>
             <div className="App">
@@ -120,8 +119,8 @@ const Category = () => {
                                             <div className="container-fluid">
                                                 <div className="row ">
                                                     <div className="col-md-12 topbodybar">
-                                                        <h4>Category</h4>
-                                                        <button type="button" className="btn btn-primary"  onClick={()=> showAddModel()}> <AddIcon fontSize={"small"}/>  Category</button>
+                                                        <h4>Fabric</h4>
+                                                        <button type="button" className="btn btn-primary"  onClick={()=> showAddModel()}> <AddIcon fontSize={"small"}/>  Fabric</button>
                                                     </div>
                                                 </div>
                                             </div>
@@ -134,12 +133,11 @@ const Category = () => {
                                                                 <thead className="tableHead">
                                                                 <tr>
                                                                     <th>#</th>
-                                                                    <th>Category Image</th>
-                                                                    <th>Category Name</th>
-                                                                    <th>Category Slug</th>
-                                                                    <th>Created Date</th>
-                                                                    <th>Category Status</th>
-                                                                    <th>Type</th>
+                                                                    <th>Fabric Image</th>
+                                                                    <th>Fabric Name</th>
+                                                                    <th>Fabric Slug</th>
+                                                                    <th>Fabric Date</th>
+                                                                    <th>Fabric Status</th>
                                                                     <th>Action</th>
                                                                 </tr>
                                                                 </thead>
@@ -176,8 +174,8 @@ const Category = () => {
                     </div>
                 </div>
 
-                {openAddCategoryModel && <AddCategory closeModel={setOpenAddCategoryModel}  err={setError} />}
-                {openEditCategoryModel && <EditCategory closeModel={setOpenEditCategoryModel}  err={setError} id={categoryId}/>}
+                {openAddCategoryModel && <AddFabrics closeModel={setOpenAddCategoryModel}  err={setError} />}
+                {openEditCategoryModel && <EditFabrics closeModel={setOpenEditCategoryModel}  err={setError} id={categoryId}/>}
 
 
             </div>
@@ -185,4 +183,4 @@ const Category = () => {
     );
 }
 
-export default Category
+export default Fabric

@@ -37,7 +37,8 @@ const AddCategory = ({ closeModel, err }) => {
         CategoryMK: "",
         CategoryMD: "",
         CategoryStatus: "Active",
-        SizingAvailability: "No"
+        type:""
+
     });
     const handleChange = (event) => {
         const name = event.target.name;
@@ -57,7 +58,7 @@ const AddCategory = ({ closeModel, err }) => {
         e.preventDefault()
         // const data = {categoryImg,formDatas}
         const { CategoryName, CategorySlug, CategoryMK, CategoryMD, CategoryStatus } = formDatas
-        if (CategoryName && CategorySlug && CategoryMK && CategoryMK && CategoryMD && CategoryStatus && categoryImg) {
+        if (CategoryName && CategorySlug && CategoryMK && CategoryMK && CategoryMD && CategoryStatus) {
             setLoader(true)
             const formData = new FormData();
             formData.append('CategoryImg', categoryImg);
@@ -66,6 +67,7 @@ const AddCategory = ({ closeModel, err }) => {
             formData.append('CategoryMK', formDatas.CategoryMK);
             formData.append('CategoryMD', formDatas.CategoryMD);
             formData.append('CategoryStatus', formDatas.CategoryStatus);
+            formData.append('type', formDatas.type);
             formData.append('tokken', localStorage.getItem("token"));
             const res = await CategoryAdd(formData)
             if (res.status === "Success") {
@@ -83,142 +85,7 @@ const AddCategory = ({ closeModel, err }) => {
         }
 
     }
-    const [sizes, setSizes] = useState()
-    const [Shirtsizes, setShirtSizes] = useState([
-        {
-            name: "FRONT LENGTH",
-            sizes: {
-                XS: "",
-                S: "",
-                M: "",
-                L: "",
-                XL: ""
-            }
-        },
-        {
-            name: "SHOULDER",
-            sizes: {
-                XS: "",
-                S: "",
-                M: "",
-                L: "",
-                XL: ""
-            }
-        },
-        {
-            name: "BUST",
-            sizes: {
-                XS: "",
-                S: "",
-                M: "",
-                L: "",
-                XL: ""
-            }
-        },
-        {
-            name: "SIDE VENT",
-            sizes: {
-                XS: "",
-                S: "",
-                M: "",
-                L: "",
-                XL: ""
-            }
-        },
-        {
-            name: "BOTTOM",
-            sizes: {
-                XS: "",
-                S: "",
-                M: "",
-                L: "",
-                XL: ""
-            }
-        },
-        {
-            name: "SLEEVE LENGTH",
-            sizes: {
-                XS: "",
-                S: "",
-                M: "",
-                L: "",
-                XL: ""
-            }
-        },
-        {
-            name: "CUFF OPENING",
-            sizes: {
-                XS: "",
-                S: "",
-                M: "",
-                L: "",
-                XL: ""
-            }
-        },
-        {
-            name: "ARM HOLE STRAIGHT",
-            sizes: {
-                XS: "",
-                S: "",
-                M: "",
-                L: "",
-                XL: ""
-            }
-        },
-        {
-            name: "NECK BANE",
-            sizes: {
-                XS: "",
-                S: "",
-                M: "",
-                L: "",
-                XL: ""
-            }
-        },
-        {
-            name: "FRONT DROP",
-            sizes: {
-                XS: "",
-                S: "",
-                M: "",
-                L: "",
-                XL: ""
-            }
-        },
-        {
-            name: "BACK DROP",
-            sizes: {
-                XS: "",
-                S: "",
-                M: "",
-                L: "",
-                XL: ""
-            }
-        }
-    ])
-
-    const inputHandlerShirt = (event, ItemName) => {
-        const name = event.target.name;
-        const value = event.target.value;
-        console.log(value, ItemName, name)
-        const updatedShirtSizes = [...Shirtsizes];
-        const backDropIndex = updatedShirtSizes.findIndex(item => item.name === ItemName);
-        if (backDropIndex !== -1) {
-            updatedShirtSizes[backDropIndex].sizes[name] = value;
-            // Update the state with the new array
-            setShirtSizes(updatedShirtSizes);
-        }
-    }
-
-    const deleteShirtSize = (name) => {
-        const updatedShirtSizes = [...Shirtsizes];
-
-        // Filter out the item with name "BACK DROP"
-        const filteredShirtSizes = updatedShirtSizes.filter(item => item.name !== name);
-
-        // Update the state with the filtered array
-        setShirtSizes(filteredShirtSizes);
-    }
+   
 
     return (
         <>
@@ -254,107 +121,23 @@ const AddCategory = ({ closeModel, err }) => {
                                 <div className="col-md-4">
                                     <TextField type="text" id="outlined-basic" onChange={handleChange} label="Category Meta Desc" required name="CategoryMD" variant="outlined" />
                                 </div>
-
                                 <div className="col-md-4">
                                     <FormControl fullWidth>
-                                        <InputLabel id="demo-simple-select-label">Status</InputLabel>
+                                        <InputLabel id="demo-simple-select-label">Stiched/Unstiched</InputLabel>
                                         <Select
                                             labelId="demo-simple-select-label"
-                                            id="demo-simple-select"
-                                            value={formDatas.CategoryStatus}
-                                            label="Age"
-                                            name="CategoryStatus"
+                                            value={formDatas.type}
+                                            label="Stiched/Unstiched"
+                                            name="type"
                                             onChange={handleChange}
                                             required
                                         >
-                                            <MenuItem value="Active">Active</MenuItem>
-                                            <MenuItem value="In-Active">In-Active</MenuItem>
+                                            <MenuItem value="">Select</MenuItem>
+                                            <MenuItem value="Stiched">Stiched</MenuItem>
+                                            <MenuItem value="Unstiched">Unstiched</MenuItem>
                                         </Select>
                                     </FormControl>
                                 </div>
-
-                                <div className="col-md-4">
-                                    <FormControl fullWidth>
-                                        <InputLabel id="demo-simple-select-label">Sizing Availability</InputLabel>
-                                        <Select
-                                            labelId="demo-simple-select-label"
-                                            id="demo-simple-select"
-                                            value={formDatas.SizingAvailability}
-                                            label="Sizing Availability"
-                                            name="SizingAvailability"
-                                            onChange={handleChange}
-                                            required
-                                        >
-                                            <MenuItem value="Yes">Yes</MenuItem>
-                                            <MenuItem value="No">No</MenuItem>
-                                        </Select>
-                                    </FormControl>
-                                </div>
-
-
-                                {formDatas.SizingAvailability === "Yes" &&
-                                    <>
-                                        <div className="col-md-3">
-                                            <FormControl>
-                                                <Form.Check
-                                                    inline
-                                                    label="Shirt Sizes"
-                                                    name="group1"
-                                                    type="checkbox"
-                                                    id={`inline-checkbox-1`}
-                                                />
-                                            </FormControl>
-                                        </div>
-
-                                        <div className="col-md-3">
-                                            <FormControl>
-                                                <Form.Check
-                                                    inline
-                                                    label="Shirt Sizes"
-                                                    name="group1"
-                                                    type="checkbox"
-                                                    id={`inline-checkbox-1`}
-                                                />
-                                            </FormControl>
-                                        </div>
-
-                                        <div className="col-md-12 mb-4">
-                                            <Table striped bordered hover variant="dark">
-                                                <thead>
-                                                    <tr>
-                                                        <th>Size(inches)</th>
-                                                        <th>XS</th>
-                                                        <th>S</th>
-                                                        <th>M</th>
-                                                        <th>L</th>
-                                                        <th>XL</th>
-                                                        <th>Action</th>
-                                                    </tr>
-                                                </thead>
-                                                <tbody>
-                                                    {Shirtsizes.map((data, index) => {
-                                                        return (
-                                                            <tr>
-                                                                <td>{data.name}</td>
-                                                                <td><input name="XS" type="number" onChange={(e) => { inputHandlerShirt(e, data.name) }} value={data.sizes.XS} style={{ width: "70px" }} /></td>
-                                                                <td><input name="S" type="number" onChange={(e) => { inputHandlerShirt(e, data.name) }} value={data.sizes.S} style={{ width: "70px" }} /></td>
-                                                                <td><input name="M" type="number" onChange={(e) => { inputHandlerShirt(e, data.name) }} value={data.sizes.M} style={{ width: "70px" }} /></td>
-                                                                <td><input name="L" type="number" onChange={(e) => { inputHandlerShirt(e, data.name) }} value={data.sizes.L} style={{ width: "70px" }} /></td>
-                                                                <td><input name="XL" type="number" onChange={(e) => { inputHandlerShirt(e, data.name) }} value={data.sizes.XL} style={{ width: "70px" }} /></td>
-                                                                <td>
-                                                                    <button type="button" className="btn btn-danger" onClick={() => deleteShirtSize(data.name)}><DeleteSweepIcon /></button>
-                                                                </td>
-                                                            </tr>
-                                                        )
-                                                    })}
-
-                                                </tbody>
-                                            </Table>
-                                        </div>
-                                    </>
-                                }
-
-
 
                                 <div className="col-md-4">
                                     <Buttons variant="contained" component="label" >

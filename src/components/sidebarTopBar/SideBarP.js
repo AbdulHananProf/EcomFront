@@ -11,8 +11,10 @@ const SideBarP = () => {
                     <h3 style={{color:"white"}}>DashBoard</h3>
                     <Menu>
                         <MenuItem> <Link to="/Dashboard">Dashboard</Link> </MenuItem>
-                        <SubMenu icon={<ListIcon/>}  label="Manage Categories">
+                        <SubMenu icon={<ListIcon/>}  label="Parameters">
                             <MenuItem><Link to="/category"><CategoryIcon/>   Categories </Link></MenuItem>
+                            <MenuItem><Link to="/fabrics"><CategoryIcon/>   Fabrics </Link></MenuItem>
+                            <MenuItem><Link to="/sizes"><CategoryIcon/>   Sizes </Link></MenuItem>
                         </SubMenu>
                         <SubMenu icon={<ListIcon/>}  label="Manage Products">
                             <MenuItem><Link to="/products"><CategoryIcon/>   Products </Link></MenuItem>

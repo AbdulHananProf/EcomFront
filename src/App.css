@@ -342,3 +342,6 @@ tbody, td, tfoot, th, thead, tr {
 .MuiButtonBase-root{
   width: 100%;
 }
+.model800 .modal-dialog {
+  max-width: 800px !important;
+}
